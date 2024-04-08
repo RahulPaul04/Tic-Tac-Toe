@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="full-container">
+        <h1 class="text-primary heading">Tic Tac Toe</h1>
+        <div class="choice-div d-sm-flex ">
+            <div data-comp="true" class="choice-btn d-flex active mx-auto">
+                <div class="circle"></div>
+                <div class="btn btn-primary">Play Against Computer</div>
+            </div>
+            <div data-comp="false" class="choice-btn d-flex mx-auto mt-5 mt-md-0">
+                <div class="circle"></div>
+                <div class="btn btn-primary">Play Against Human</div>
+            </div>
+        </div>
+        <div class="board col-md-6 col-lg-4 col-10">
+            <div id="0" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="line hidden"></div>
+                <div class="line-down hidden"></div>
+                
+
+            </div>
+            <div id="1" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="line-down hidden"></div>
+
+            </div>
+            <div id="2" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="line-down hidden"></div>
+
+            </div>
+            <div id="3" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="line hidden"></div>
+
+            </div>
+            <div id="4" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="diagonal hidden"></div>
+            </div>
+            <div id="5" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+            </div>
+            <div id="6" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+                <div class="line hidden"></div>
+
+            </div>
+            <div id="7" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+            </div>
+            <div id="8" class="box">
+                <img class="background-img" src="./images/X.png" alt="">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    x_svg = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="981.000000pt" height="980.000000pt" viewBox="0 0 981.000000 980.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,980.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M1369 9782 c-133 -44 -210 -112 -640 -557 -85 -88 -239 -241 -344
+-340 -198 -189 -277 -279 -346 -396 l-42 -70 26 -106 c66 -269 224 -489 602
+-842 105 -97 728 -716 1385 -1375 l1195 -1198 -1206 -1201 c-663 -661 -1293
+-1294 -1400 -1407 -492 -520 -530 -565 -569 -668 -55 -145 -27 -278 95 -439
+25 -35 164 -176 308 -315 144 -138 302 -295 351 -347 274 -294 393 -402 526
+-482 l70 -41 77 17 c156 34 311 109 459 221 128 96 227 190 418 394 94 102
+711 723 1370 1380 l1198 1195 1152 -1157 c1158 -1164 1309 -1313 1733 -1709
+242 -227 287 -263 381 -307 48 -23 71 -27 147 -27 83 0 96 3 165 36 41 20 98
+54 126 75 28 21 295 285 593 586 448 452 544 553 557 590 22 62 29 186 15 260
+-16 82 -85 224 -152 313 -29 39 -720 738 -1536 1555 l-1483 1485 1154 1150
+c636 633 1239 1238 1342 1345 318 332 580 616 614 664 112 164 118 310 18 481
+-43 72 -154 188 -503 526 -88 85 -245 244 -348 352 -185 194 -308 299 -412
+353 l-50 27 -105 -27 c-194 -48 -387 -163 -597 -353 -47 -43 -187 -188 -313
+-323 -125 -135 -269 -283 -321 -329 -52 -47 -565 -554 -1140 -1128 l-1045
+-1044 -1077 1084 c-1210 1218 -1941 1930 -2081 2027 -123 84 -253 109 -367 72z"/>
+</g>
+</svg>`
+    o_svg = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="1200.000000pt" height="1200.000000pt" viewBox="0 0 1200.000000 1200.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,1200.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M5635 11989 c-1653 -100 -3185 -877 -4246 -2151 -1317 -1582 -1731
+-3725 -1097 -5687 533 -1651 1770 -2999 3373 -3678 569 -241 1154 -387 1800
+-450 252 -24 818 -24 1070 0 1034 101 1955 427 2800 991 1113 742 1958 1857
+2370 3126 749 2306 42 4831 -1794 6409 -1006 865 -2235 1361 -3568 1441 -194
+11 -513 11 -708 -1z m790 -1485 c932 -82 1852 -478 2559 -1102 1348 -1190
+1864 -3026 1335 -4753 -156 -511 -447 -1055 -792 -1483 -117 -145 -145 -176
+-296 -330 -908 -924 -2127 -1407 -3423 -1355 -1032 42 -2031 443 -2798 1125
+-461 409 -809 866 -1075 1409 -253 517 -393 1026 -446 1615 -16 185 -13 595 6
+795 182 1911 1548 3501 3405 3965 499 124 989 161 1525 114z"/>
+</g>
+</svg>`
+    
+    board = [[2,3,4],[5,6,7],[8,9,10]]
+    iscomp = true
+
+    x_player = {
+        url:"./images/X.png",
+        char:"X"}
+    O_player = {
+        url:"./images/O.png",
+        char:'O'}
+
+    count = 0
+
+    choice = document.querySelectorAll(".choice-btn")
+
+    choice.forEach(button =>{
+        button.addEventListener('click',(event)=>{
+            btn = document.querySelector(".active")
+            btn.classList.remove("active")
+            event.currentTarget.classList.add("active")
+            data = event.currentTarget.dataset.comp
+            if(data == "true"){
+                iscomp = true
+            }
+            else{
+                iscomp = false
+            }
+        })
+    })
+
+    current_player = O_player
+    current_image = document.createElement('img')
+    current_image.classList.add("current-img")
+    current_image.src = current_player.url
+
+    box = document.querySelectorAll(".box")
+
+    const drawline = (xval,yval,line) =>{
+        console.log("line",line);
+        let return_element
+        if(line[2]){
+            console.log("Draw diagonal line");
+            line = document.querySelector(".diagonal")
+            line.style.setProperty("--angle","45deg")
+            line.classList.remove("hidden")
+            return_element = line
+        }
+        else if(line[3]){
+            console.log("Draw diagonal line");
+            line = document.querySelector(".diagonal")
+            line.style.setProperty("--angle","-45deg")
+            line.classList.remove("hidden")
+            return_element = line
+        }
+        else if(line[1]){
+            id = xval * 3 
+            
+            el = document.getElementById(id)
+            console.log("elemeent",el)
+            line = el.querySelector(".line")
+            line.classList.remove("hidden")
+            return_element = line
+        }
+        else if(line[0]){
+            id = yval
+            
+            el = document.getElementById(id)
+            console.log("elemeent",el)
+            line = el.querySelector(".line-down")
+            line.classList.remove("hidden")
+            return_element = line
+        }
+
+        return return_element
+        
+    }
+
+
+    const check_win = (xval,yval,val)=>{
+        vertical_flag = true
+        horizontal_flag = true
+        dioganal_flag1 = false
+        diagonal_flag2 = false
+
+        for(let i = 0;i<3;i++){
+            if(board[xval][i] != val){
+                console.log("here in horizontal")
+                horizontal_flag = false
+            }
+        }
+
+        for(let i = 0;i<3;i++){
+            if(board[i][yval] != val){
+
+                vertical_flag = false
+            }
+        }
+
+        if(xval == yval || xval + yval == 2){
+            if(board[1][1] == board[0][0] && board[1][1]== board[2][2]){
+                dioganal_flag1 = true
+            }
+            else if(board[0][2] == board[1][1] && board[1][1] == board[2][0]){
+                diagonal_flag2 = true
+            }
+        }
+
+        console.log(vertical_flag,horizontal_flag,dioganal_flag1,diagonal_flag2)
+
+        el = drawline(xval,yval,[vertical_flag,horizontal_flag,dioganal_flag1,diagonal_flag2])
+
+        return [vertical_flag || horizontal_flag || dioganal_flag1 || diagonal_flag2,el]
+
+
+    }
+
+    ai_player = 1
+    h_player = 0
+
+    const getAvailIndex = (bor)  =>{
+        let avail = bor.filter((val)=>val != 1 && val != 0).map(val => val -= 2)
+        return avail
+
+    }
+
+    const iswinState = (bor,player) =>{
+        let hor_flag = false
+        let ver_flag = false
+
+        // console.log("inside isWinState",bor,player);
+
+        
+        for(let i = 0;i<=6;i+=3){
+            flag = true
+            for(let j = i;j<i+3;j++){
+                if(bor[j] != player){
+                    flag = false
+                }
+            }
+            hor_flag = hor_flag || flag
+
+        }
+
+        for(let i = 0;i<=2;i++){
+            flag = true
+            for(let j = i;j<=8;j+=3){
+
+                if(bor[j] != player){
+
+                    flag = false
+                }
+            }
+            ver_flag = ver_flag || flag
+
+        }
+
+        diag_flag1 = bor[0] == player && bor[4] == player && bor[8] == player
+
+        diag_flag2 = bor[2] == player && bor[4] ==player && bor[6] == player
+
+        // console.log("Winstateflags",hor_flag , ver_flag , diag_flag1 , diag_flag2);
+
+        return hor_flag || ver_flag || diag_flag1 || diag_flag2
+    }
+
+
+    const minmax = (bor, currPlayer) => {
+        const aval = getAvailIndex(bor);
+
+        if (iswinState([...bor], ai_player)) {
+            // console.log("aiwin", bor);
+            return 1;
+        } else if (iswinState([...bor], h_player)) {
+            // console.log("humanwin", bor);
+            return -1;
+        } else if (aval.length == 0) {
+            // console.log("drawboard", bor);
+            return 0;
+        }
+
+        let max = -Infinity;
+        let min = Infinity;
+        let val_Array = []
+        for (let i of aval) {
+            // console.log("cuuboard",bor)
+            let nextBoard = [...bor];
+            nextBoard[i] = currPlayer;
+            let nextPlayer = currPlayer == ai_player ? h_player : ai_player;
+            let val = minmax(nextBoard, nextPlayer);
+            ob = {[i]:val}
+            val_Array.push(ob)
+            // if(currPlayer == ai_player && i == 8){
+            //     console.log(nextBoard,val,"negative return")
+            // }
+
+            if(currPlayer==ai_player){
+                max = Math.max(val,max)
+                if(max == 1){
+                    break
+                }
+            }
+            else{
+                min = Math.min(min, val);
+                if(min == -1){
+                    break
+                }
+            }
+        }
+
+        
+        let re_val = currPlayer == ai_player ? max : min;
+        // console.log(val_Array,bor,);
+        return re_val;
+    }
+
+
+    const playcomp = (bor1,ai)=>{
+
+        let avail = getAvailIndex(bor1)
+        currmax = -10
+        let max
+        for(let i of avail){
+            temp = bor1[i]
+            bor1[i] = ai
+            console.log("current i ",i);
+            let val = minmax([...bor1],0)
+            console.log("playcomp",val,bor1,currmax)
+            if(currmax <val){
+                console.log();
+                currmax = val
+                max = i
+                if(currmax == 1){
+                    break
+                }
+            }
+            console.log("max",max);
+            bor1[i] = temp
+        }
+
+        return max
+    }
+
+
+
+    box.forEach((element)=>{
+        element.addEventListener('mouseover',(event)=>{
+            if(event.currentTarget.children[0].style.opacity == 0){
+                current_image.style.opacity = 0.5
+                target = event.currentTarget
+                target.appendChild(current_image)
+            }
+        })
+
+        element.addEventListener('mouseleave',(event)=>{
+            if(event.currentTarget.children[0].style.opacity == 0)
+            {
+                target = event.currentTarget
+                curr = target.querySelector(".current-img")
+                curr.remove()
+            }
+        })
+
+
+        element.addEventListener('click',(event)=>{
+            target = event.currentTarget
+            image = target.children[0]
+            if(image.style.opacity == 0){
+               image.style.opacity = 1 
+               image.src = current_image.src
+               count += 1
+
+               let xval = Math.floor(target.id/3)
+               let yval = parseInt(target.id) - 3*xval
+
+               console.log(xval,yval);
+               let current_char = current_player.char
+
+               curr_play = current_player
+
+               if(current_player == x_player){
+                current_player = O_player
+                current_image.src = current_player.url
+                board[xval][yval] = 1
+
+               }
+               else{
+                current_player = x_player
+                current_image.src = current_player.url
+                board[xval][yval] = 0
+
+               }
+
+            //    iswinState([...board.flat()],0)
+
+
+               
+               current_image.style.opacity = 0
+
+               val = check_win(xval,yval,board[xval][yval])
+               console.log("value",val)
+               if(val[0]){
+                count = 0
+                let box = document.querySelectorAll(".box")
+                box.forEach((el)=>{
+                    el.style.pointerEvents = "none"
+                })
+                setTimeout(() => {
+                    alert(`${current_char} Wins`)
+                    box.forEach((el)=>{
+                        el.children[0].style.opacity = 0
+                    })
+                    board = [[2,3,4],[5,6,7],[8,9,10]]
+                    val[1].classList.add("hidden")
+                    box.forEach((el)=>{
+                    el.style.pointerEvents = "auto"
+                    current_player = O_player
+                    current_image.src = O_player.url
+                })
+                }, 1000);
+
+               }
+
+               else if(count > 8){
+                count = 0
+                setTimeout(() => {
+                    
+                    alert(`Game Ends in a Tie`)
+                    box.forEach((el)=>{
+                        el.children[0].style.opacity = 0
+                    })
+                    board = [[2,3,4],[5,6,7],[8,9,10]]
+                    current_player = O_player
+                    current_image.src = O_player.url
+                }, 0);
+               }
+
+               else if(iscomp && current_player == x_player){
+                let bor = [...board.flat()]
+                console.time("playcomp")
+                let comp_val =  playcomp(bor,1)
+                console.timeEnd("playcomp")
+                let next = document.getElementById(comp_val)
+                next.click()
+               } 
+
+               
+            }
+        })
+    })
+
+</script>
+</html>
